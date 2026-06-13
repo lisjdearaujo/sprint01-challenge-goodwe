@@ -29,7 +29,7 @@ A pergunta central que orienta o projeto é como transformar sessões de recarga
 
 ## Frente 1 — Contexto e Problema
 
-> _A ser preenchido pela equipe responsável por esta frente._
+> _A ser preenchido._
 
 ### Infraestruturas de recarga compartilhada
 
@@ -53,10 +53,21 @@ A pergunta central que orienta o projeto é como transformar sessões de recarga
 
 > _A ser preenchido._
 
+### Resolução Normativa ANEEL nº 1.000/2021
+
+> _Documentar os pontos relevantes para a operação do EV ChargeOps: exploração comercial da recarga, comunicação prévia à distribuidora e exigência de protocolos abertos._
+
+### Carregador GoodWe HCA G2
+
+> _Descrever as interfaces disponíveis (RS-485, LAN, Wi-Fi, Bluetooth e RFID) e o que cada uma permite fazer na plataforma._
+
+### API GoodWe — SEMS Portal
+
+> _Documentar os dados expostos pela API: status, potência, energia entregue e eventos de sessão._
 
 ### Opção de aprofundamento escolhida
-> _A ser preenchido._
 
+> _A ser preenchido._
 
 ---
 
