@@ -116,5 +116,15 @@ A pergunta central que orienta o projeto é como transformar sessões de recarga
 
 ## Fontes Consultadas
 
-> _Listar todas as fontes efetivamente consultadas pela equipe ao longo da pesquisa._
->
+### Frente 1
+
+- Ambar-e. Carregamento compartilhado em condomínios: como funciona e quem paga a conta. Disponível em: https://ambare.com.br/carregamento-compartilhado-em-condominios-como-funciona-e-quem-paga-a-conta/
+- Zangari. Carros elétricos em condomínio: o que mudou em 2026 e como se preparar. Disponível em: https://zangari.com.br/blog/carros-eletricos-condominio/
+- Migalhas. Lei 18.403/26 de SP: recarga de veículos elétricos em condomínios. Disponível em: https://www.migalhas.com.br/coluna/migalhas-edilicias/452093/lei-18-403-26-de-sp-recarga-de-veiculos-eletricos-em-condominios
+- MyCond. Desafios para carregadores de carros elétricos em condomínios. Disponível em: https://mycond.com.br/desafios-para-carregadores-de-carros-eletricos-em-condominios/
+- CondoCash. Carregador de carro elétrico em condomínio: instalação, custos e rateio. Disponível em: https://condocash.com.br/carregador-de-carro-eletrico-em-condominio-instalacao-custos-e-rateio/
+- Canal VE. Como funciona o protocolo OCPP na recarga de carros elétricos. Disponível em: https://canalve.com.br/como-funciona-o-protocolo-ocpp-nas-recargas-de-carros-eletricos/
+- Kilowatt Crew. OCPP: o guia definitivo para quem opera, integra e desenvolve infraestrutura de recarga. Disponível em: https://www.kilowattcrew.app/noticias/ocpp-open-charge-point-protocol-o-guia-definitivo
+- VoltBras. Como o OCPP 1.6 facilita o carregamento elétrico. Disponível em: https://voltbras.com/ocpp-1-6-carregamento/
+- Power2Go. Cobrança por kWh ou assinatura mensal? O melhor modelo para recarga de carros elétricos. Disponível em: https://www.power2go.com.br/post/melhor-modelo-de-cobran%C3%A7a-para-recarga-de-carros-el%C3%A9tricos
+- Sindiconet. Carro elétrico: recarregue seu veículo sem sair do condomínio. Disponível em: https://www.sindiconet.com.br/informese/carro-eletrico-mercado-coluna-de-olho-no-mercado
