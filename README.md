@@ -1,4 +1,4 @@
-<img width="300" height="274" alt="ev_chargeops_arquitetura" src="https://github.com/user-attachments/assets/b965a450-46b2-400d-8676-99041e0e2736" /># EV ChargeOps — Enterprise Challenge 2026
+# EV ChargeOps — Enterprise Challenge 2026
 
 **Parceiro:** GoodWe / FIAP Energy Innovation Lab
 
@@ -142,6 +142,8 @@ Os dois módulos de IA utilizam os dados já coletados pelo fluxo principal de s
 ---
 
 ## Diagrama de Arquitetura
+
+<img width="300" height="274" alt="ev_chargeops_arquitetura" src="https://github.com/user-attachments/assets/b965a450-46b2-400d-8676-99041e0e2736" />
 
 ![Uploading ev_<svg width="100%" viewBox="0 0 680 620" role="img" style="" xmlns="http://www.w3.org/2000/svg">
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Arquitetura EV ChargeOps — 4 camadas</title>
