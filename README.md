@@ -48,7 +48,7 @@ Há ainda modelos em que o condomínio deixa de ser o gestor da operação. Empr
 O que todos esses modelos têm em comum é a dependência de um sistema capaz de medir com precisão o consumo individual, o mesmo problema apontado lá no início como ausente na maior parte das infraestruturas compartilhadas hoje. Sem essa camada, qualquer modelo de cobrança se torna impreciso ou injusto. É justamente aí que plataformas como o EV ChargeOps se tornam estruturais, atuando como uma base que viabiliza qualquer um desses modelos de negócio em uma infraestrutura compartilhada.
 
 
-### Opção C — Análise de dados públicos
+### Opção de aprofundamento (C) — Análise de dados públicos
 
 > _Apresentar os dados levantados sobre crescimento da frota de VE no Brasil, distribuição de pontos de recarga e perfis de uso, com análise própria da equipe._
 
@@ -78,23 +78,65 @@ O que todos esses modelos têm em comum é a dependência de um sistema capaz de
 
 ## Frente 3 — Arquitetura e IA
 
-> _A ser preenchido._
+A plataforma EV ChargeOps é organizada em quatro camadas interdependentes. Cada camada tem uma responsabilidade clara e se comunica com a camada adjacente de forma estruturada. Entender essa separação é o que torna possível raciocinar sobre o fluxo de dados completo, desde o momento em que o veículo é conectado até a geração da fatura ao final do mês.
 
-### Camadas da plataforma EV ChargeOps
+A primeira camada é a física, representada pelo carregador GoodWe HCA G2, modelo GW7K-HCA-20, instalado no estacionamento L1 da FIAP. Trata-se de um carregador CA monofásico com potência nominal de 7 kW, tensão de entrada de 220 V e corrente de 32 A. Ele opera por convecção natural, tem grau de proteção IP66, o que significa que pode ser instalado em ambientes expostos como estacionamentos cobertos ou abertos, e suporta faixa operacional de -30°C a +50°C. Toda a gestão do equipamento é feita pelo aplicativo SEMS+ da GoodWe.
 
-> _Descrever as camadas física, de conectividade, de aplicação e de apresentação._
+O carregador suporta cinco modos de operação configuráveis: carregamento rápido, prioridade para energia solar, combinação de energia solar com bateria (FV+BAT), agendamento de horário e controle de carga dinâmico. Este último modo é particularmente relevante para a plataforma, pois permite que o sistema ajuste automaticamente a potência de carregamento conforme a disponibilidade da rede elétrica do condomínio, evitando sobrecarga sem interromper as sessões ativas.
 
-### Fluxo de dados: da sessão à fatura
+Para a autenticação dos usuários, o equipamento aceita três métodos: cartão RFID, sendo que dois cartões já acompanham o kit de instalação, aplicativo SEMS+ via rede Wi-Fi ou LAN, e início automático, que pode ser configurado pelo gestor para dispensar qualquer autenticação. As interfaces de comunicação disponíveis no hardware são Wi-Fi, RS-485 com duas portas, LAN e RFID. O Bluetooth não é uma interface direta do carregador, mas está presente no aplicativo SEMS+ para pareamento e configuração inicial.
 
-> _Descrever o caminho completo dos dados, as transformações que ocorrem e onde a IA entra no fluxo._
+A segunda camada é a de conectividade, responsável por transportar os dados do carregador até o servidor da plataforma. O protocolo nativo do GW7K-HCA-20, conforme confirmado no datasheet oficial, é o Modbus TCP. Esse protocolo funciona como uma tabela de registros: cada posição da tabela armazena um valor diferente, como tensão, corrente ou energia acumulada, e o servidor consulta esses registros periodicamente pela rede local. É o protocolo usado para leitura de telemetria em baixo nível.
 
-### Modelo de rateio proposto
+O OCPP, sigla para Open Charge Point Protocol, é o padrão aberto de mercado para comunicação entre carregadores e sistemas de gerenciamento centralizados. Ele define mensagens específicas para cada evento de uma sessão: o carregador se apresenta ao sistema com BootNotification ao ser ligado, o usuário é validado por Authorize, a sessão tem início registrado por StartTransaction, durante a sessão o carregador envia leituras periódicas de consumo por MeterValues, e o encerramento é registrado por StopTransaction. Essa separação de eventos é o que permite rastrear cada sessão individualmente com precisão.
 
-> _Definir as variáveis utilizadas, como a fatura individual é calculada e como o modelo lida com casos excepcionais._
+A terceira camada é a de aplicação, que é o núcleo da plataforma. É aqui que os dados brutos se transformam em informação útil. Essa camada é composta por quatro componentes principais. O primeiro é o CSMS, o sistema de gerenciamento das estações de recarga, que recebe os eventos do carregador em tempo real e é o ponto central de controle das sessões. O segundo é o serviço de ingestão e processamento, que normaliza, valida e persiste os dados no banco da plataforma. O terceiro é o motor de rateio, que aplica as regras de cálculo de consumo individual e gera os dados de faturamento. O quarto é o módulo de IA, que executa os modelos de machine learning para previsão de demanda e detecção de anomalias, descrito em detalhe na seção de aprofundamento abaixo.
 
-### Opção de aprofundamento escolhida
+A quarta camada é a de apresentação, que materializa os dados processados em interfaces digitais para dois perfis diferentes. O painel do gestor oferece visão consolidada de todas as sessões do mês, gráficos de consumo por unidade e por período, alertas gerados pelo módulo de IA e exportação de relatórios e faturas. O aplicativo do usuário mostra o histórico individual de sessões e consumo, permite autenticação para iniciar sessões e exibe a fatura mensal com detalhamento de uso.
 
-> _A ser preenchido._
+O caminho que um dado percorre desde a conexão do veículo até a geração da fatura passa por seis etapas com transformações distintas em cada uma.
+Na primeira etapa, o usuário se autentica junto ao carregador por cartão RFID, pelo aplicativo SEMS+ ou por início automático, quando configurado. O carregador envia uma mensagem Authorize ao CSMS, que valida a identidade no banco de dados e responde com Accepted ou Blocked. Com a autorização confirmada, o carregador emite StartTransaction com o timestamp de início e a leitura inicial do medidor em kWh acumulado.
+
+Na segunda etapa, durante toda a sessão, o carregador envia mensagens MeterValues a intervalos regulares, geralmente a cada 60 segundos. Cada mensagem contém potência instantânea em kW, tensão, corrente, energia acumulada no período e status do conector. O serviço de ingestão normaliza e persiste esses registros como série temporal no banco de dados.
+
+Na terceira etapa, quando o usuário desconecta o veículo ou a sessão atinge o tempo máximo configurado, o carregador emite StopTransaction com o timestamp de fim e a leitura final do medidor. O consumo bruto da sessão é calculado subtraindo a leitura inicial da leitura final, e o status da sessão é atualizado para concluída ou interrompida, dependendo do motivo do encerramento.
+
+Na quarta etapa, o módulo de IA processa os dados da sessão encerrada junto ao histórico acumulado do mês. Essa etapa é descrita em detalhe na seção de aprofundamento.
+
+Na quinta etapa, ao final do mês ou sob demanda do gestor, o motor de rateio consolida todas as sessões do período, aplica as regras de cálculo definidas pelo modelo adotado e lida com os casos excepcionais descritos abaixo.
+
+Na sexta etapa, o sistema gera a fatura individual com detalhamento completo: número de sessões, kWh total consumido, valor calculado com base na tarifa vigente e total a pagar. A fatura é disponibilizada no aplicativo do usuário e o gestor recebe o relatório consolidado.
+
+
+O modelo adotado pela equipe é o rateio por consumo individual medido em kWh, com ajuste por tarifa horária. A escolha por esse modelo se justifica pela sua precisão e pela sua transparência: cada usuário paga exatamente pela energia que consumiu, sem estimativas ou divisões proporcionais arbitrárias.
+
+As variáveis utilizadas no cálculo são cinco. A primeira é o kWh por sessão, que é a energia efetivamente entregue ao veículo medida pelo medidor interno do GW7K-HCA-20. A segunda é a tarifa de energia em R$/kWh, que corresponde à tarifa vigente da distribuidora local, com distinção entre horário de ponta e fora de ponta. A terceira é o fator de demanda, que é o percentual de uso em horário de ponta, entre 18h e 21h, onde a tarifa é mais cara, calculado sessão a sessão. A quarta é o custo fixo mensal, que é a parcela da taxa condominial relacionada à infraestrutura de recarga, como manutenção e depreciação do equipamento, rateada igualmente entre os usuários ativos no mês. A quinta é o identificador da unidade condominial, que vincula todas as sessões de uma unidade a um único responsável pelo pagamento, independentemente de quantos veículos ela tenha.
+
+A fórmula de cálculo da fatura individual é a seguinte:
+
+```
+Fatura da unidade = soma(kWh por sessão × tarifa ajustada) + custo fixo mensal / número de usuários ativos
+```
+
+Onde a tarifa ajustada é igual à tarifa base somada ao produto do fator de demanda pelo adicional de ponta. Essa lógica garante que usuários que carregam majoritariamente em horário de ponta paguem proporcionalmente mais, o que cria um incentivo natural para deslocar o uso para períodos de menor custo.
+
+Para os casos excepcionais, o modelo funciona da seguinte forma. Quando uma sessão é interrompida, o consumo medido até o momento da interrupção é cobrado normalmente, pois a energia já foi entregue ao veículo independentemente do motivo do encerramento. O status de interrompida é registrado para auditoria, e se a interrupção foi causada por falha do equipamento, identificada pelo módulo de IA de detecção de anomalias, o gestor pode estornar a sessão manualmente. Quando um usuário não carregou no mês, a parcela variável de consumo em kWh é zero e ele não paga pela energia. A parcela do custo fixo só é cobrada se o usuário tem acesso ativo no sistema, com RFID cadastrado, e usuários com acesso suspenso são excluídos do rateio do custo fixo. Quando uma unidade tem dois veículos, o consumo de todas as sessões de ambos é somado e o cálculo é feito sobre o total da unidade, não por veículo, o que simplifica a gestão e evita disputas internas. Por fim, o sistema consulta mensalmente a bandeira tarifária vigente da ANEEL, verde, amarela ou vermelha, e ajusta automaticamente o valor base do kWh antes de calcular as faturas do período.
+
+### Opção de Aprofundamento (B) — Definição do papel da IA
+
+O condomínio não tem como saber, sem um modelo preditivo, quanto de energia os carregadores vão consumir nos próximos dias ou semanas. Sem essa informação, o gestor não consegue negociar a demanda contratada com a distribuidora. Contratar menos do que o necessário gera multa. Contratar muito mais gera desperdício. A previsão de demanda resolve esse problema diretamente.
+A técnica utilizada é a regressão sobre séries temporais. Regressão é um tipo de modelo que aprende a relação entre variáveis de entrada e um valor de saída numérico. No caso, as entradas são o histórico de sessões com seus respectivos horários, dias da semana, consumo em kWh e variáveis de contexto como temperatura e feriados, e a saída é a estimativa de consumo futuro. Modelos como ARIMA, Prophet e XGBoost são candidatos para essa tarefa.
+
+Os dados necessários para treinar o modelo são o histórico de sessões com timestamp de início e fim, kWh consumido por sessão, dia da semana, horário de início e dados de temperatura. O dataset do Kaggle de Electric Vehicle Charging Sessions, com registros reais de frota corporativa nos EUA, pode ser usado para prototipação inicial enquanto o histórico real do carregador da FIAP não está disponível.
+O impacto esperado é a redução de custos com tarifas de demanda, a possibilidade de notificar usuários sobre os horários de menor custo para recarga e a geração de dados preditivos que o gestor pode usar para planejar manutenções preventivas nos períodos de menor uso previsto.
+
+Sessões com comportamento atípico são difíceis de identificar manualmente em qualquer volume de dados. Consumo muito acima do esperado para um determinado veículo, duração anormalmente longa, interrupções frequentes em sequência ou uso do carregador por identidades não cadastradas são exemplos de situações que passam despercebidas sem monitoramento automatizado. Fraude por cartão RFID clonado, falha no equipamento entregando energia incorreta e consumo por dispositivos não relacionados a veículos elétricos são casos reais que esse módulo se propõe a capturar.
+
+A técnica utilizada é a detecção de anomalias com algoritmos não supervisionados, sendo o Isolation Forest o candidato principal. Diferente dos modelos supervisionados, que precisam de exemplos rotulados de fraude para aprender, o Isolation Forest aprende o padrão normal das sessões e identifica automaticamente os pontos que se afastam significativamente desse padrão. O modelo pode ser complementado com regras determinísticas simples, como emitir alerta quando o consumo de uma sessão for superior ao dobro da média histórica do usuário.
+Os dados necessários são o histórico de sessões por usuário com kWh, duração e horário, o modelo do veículo declarado na plataforma para validar se o consumo está dentro da capacidade da bateria, os registros granulares de MeterValues com a curva de potência ao longo da sessão e os logs de erro do equipamento reportados via StatusNotification.
+
+O impacto esperado é a proteção contra fraudes e uso indevido da infraestrutura compartilhada, a identificação precoce de falhas no equipamento e o aumento da confiança dos usuários no sistema de rateio, pois anomalias são sinalizadas e investigadas antes da emissão da fatura.
+Os dois módulos de IA utilizam os dados já coletados pelo fluxo principal de sessões, sem exigir qualquer infraestrutura adicional de sensores. O aprendizado é incremental: quanto mais sessões acumuladas, mais precisas ficam as previsões e mais calibrada fica a detecção de anomalias.
 
 
 ---
