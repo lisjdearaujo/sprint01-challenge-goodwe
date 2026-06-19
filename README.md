@@ -177,3 +177,9 @@ Os dois módulos de IA utilizam os dados já coletados pelo fluxo principal de s
 - VoltBras. Como o OCPP 1.6 facilita o carregamento elétrico. Disponível em: https://voltbras.com/ocpp-1-6-carregamento/
 - Power2Go. Cobrança por kWh ou assinatura mensal? O melhor modelo para recarga de carros elétricos. Disponível em: https://www.power2go.com.br/post/melhor-modelo-de-cobran%C3%A7a-para-recarga-de-carros-el%C3%A9tricos
 - Sindiconet. Carro elétrico: recarregue seu veículo sem sair do condomínio. Disponível em: https://www.sindiconet.com.br/informese/carro-eletrico-mercado-coluna-de-olho-no-mercado
+
+### Frente 2
+
+
+### Frente 3
+- GoodWe. Linha HCA G2: datasheet oficial GW7K-HCA-20, monofásico 7 kW. Versão PT-V2.1, 2024. Disponível em: https://br.goodwe.com/Ftp/Downloads/Datasheet/PT/GW_HCA-G2_Datasheet-PT.pdf
