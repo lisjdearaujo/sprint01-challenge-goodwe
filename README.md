@@ -50,17 +50,78 @@ O que todos esses modelos têm em comum é a dependência de um sistema capaz de
 
 ### Aprofundamento (C) — Análise de dados públicos
 
-A expansão de veículos elétricos no Brasil cresceu exponencialmente nos últimos anos, por mais que o Brasil teve acesso aos carros elétricos de modo "atrasado", em 2018 chegou ao consumidor final o Renault Zoe. A partir de 2020, finalmente foi possível realizar uma análise de dados concreta, resultando em registros confiáveis para realizar o acompanhamento de sua evolução, que cresceu de forma expressiva, tendo marco de 177.358 unidades emplacadas, que logo foi superado no final de 2025, o total foi aproximadamente 613.389 unidades, liderada pela BYD, Toyota e GWM.
+A expansão de veículos elétricos no Brasil cresceu exponencialmente nos últimos anos, por mais que o Brasil teve acesso aos carros elétricos de modo "atrasado", em 2018 chegou ao consumidor final o Renault Zoe. A partir de 2020, finalmente foi possível realizar uma análise de dados concreta, resultando em registros confiáveis para realizar o acompanhamento de sua evolução, que cresceu de forma expressiva, tendo como marco 177.358 unidades emplacadas acumuladas até 2024, número que logo foi superado: no final de 2025, o total chegou a aproximadamente 613.389 unidades, lideradas pela BYD, Toyota e GWM.
 
-Entretanto, há uma questão a ser resolvida, em meio a tanto crescimento da tecnologia, é visto que há poucos pontos de recarga, totalizando em fevereiro 21.061 eletropostos públicos e semipúblicos, cerca de 5.900% desde 2020. Por mais do alto valor de eletropostos, a proporção atual é de um carregador para cada 19,6 veículos, o índice considerado adequado pelo setor é de 1 para 10, evidenciando que a infraestrutura, apesar de crescer, não alcança o ritmo da frota.
+As tabelas abaixo mostram a evolução dos emplacamentos de veículos elétricos a bateria (BEV) e híbridos plug-in (PHEV) no Brasil e no estado de São Paulo. Os valores de 2026 são parciais e podem ser atualizados com o decorrer do ano.
 
-A recarga em ambientes privados, como por exemplo, os condomínios, é considerado um cenário de maior demanda reprimida. O número de licenciamentos acumulados de veículos elétricos passou de 1,9 mil em 2020 para mais de 215 mil em 2024, um aumento de 100 vezes em um período de cinco anos, o ponto de recarga tem sido um dos fatores por escolha de alugar ou comprar um imóvel. Com o crescimento acelerado do uso de veículos elétricos, o crescimento de ações judiciais por moradores de condomínios aumentou nos últimos dois anos por conta do custo de instalação, prioridade de vagas e responsabilidade civil por fiação inadequada. Com a ausência de uma legislação federal clara só piora o cenário, o projeto de lei nº 158/2025, que garantia ao morador o direito de instalar carregador na própria vaga com custos individuais, ainda está em período de aprovação.
+**Emplacamentos BEV — Brasil**
 
-Em São Paulo, a Lei 18.403/26 já está em vigor, mas ainda depende de regulamentação técnica complementar para ser aplicada com a devida segurança para os usuários. As projeções reforçam a urgência do problema, a estimativa é de aproximadamente 580 mil carregadores no Brasil até 2030, sendo 490 mil em ambientes residenciais e de frotas, um investimento estimado em R$ 6,8 bilhões que ainda necessita de soluções de gestão eficientes.
+| Ano  | Emplacamentos |
+|------|---------------|
+| 2022 | 8.457         |
+| 2023 | 19.310        |
+| 2024 | 61.615        |
+| 2025 | 80.184        |
+| 2026 | 69.488        |
 
-Em relação ao perfil de uso, observa-se que a maior parte dos proprietários de veículos elétricos no Brasil realiza o abastecimento em locais privados, como residências, condomínios e empresas. Mas ainda mais de um terço dos proprietários considera a atual infraestrutura como insuficiente, outra parcela aponta a preocupação com a recarga como fonte de estresse, mesmo com a predominância do uso privado, a ausência de pontos públicos acessíveis impacta diretamente a experiência do usuário.
+**Emplacamentos PHEV — Brasil**
 
-Os dados analisados mostram um mercado em expansão acelerada com infraestrutura atrasada de acordo com o nível de tecnologia, especialmente no contexto de recargas compartilhadas em ambientes de condomínios e corporativos. E esse desafio entre os pontos de recarga e o aumento do uso de veículos elétricos é o problema central que o nosso projeto se propõe a resolver, oferecendo uma solução de gestão inteligente para espaços onde há o compartilhamento de uso e a demanda se torna incapaz de suprir o aumento exponencial.
+| Ano  | Emplacamentos |
+|------|---------------|
+| 2022 | 11.503        |
+| 2023 | 33.049        |
+| 2024 | 64.010        |
+| 2025 | 99.996        |
+| 2026 | 58.194        |
+
+**Emplacamentos BEV — Estado de São Paulo**
+
+| Ano  | Emplacamentos |
+|------|---------------|
+| 2022 | 2.718         |
+| 2023 | 5.920         |
+| 2024 | 15.913        |
+| 2025 | 17.411        |
+| 2026 | 14.203        |
+
+**Emplacamentos PHEV — Estado de São Paulo**
+
+| Ano  | Emplacamentos |
+|------|---------------|
+| 2022 | 4.279         |
+| 2023 | 12.525        |
+| 2024 | 22.576        |
+| 2025 | 32.633        |
+| 2026 | 18.588        |
+
+Entretanto, há uma questão a ser resolvida. Em meio a tanto crescimento, há poucos pontos de recarga. Os dados mais recentes apontam 25.429 eletropostos públicos e semipúblicos no Brasil, um crescimento de cerca de 5.900% desde 2021, mas a proporção atual ainda é de um carregador para cada 19,6 veículos. O índice considerado adequado pelo setor é de 1 para 10, evidenciando que a infraestrutura, apesar de crescer, não acompanha o ritmo da frota.
+
+**Eletropostos no Brasil**
+
+| Ano  | Pontos de recarga |
+|------|-------------------|
+| 2021 | 800               |
+| 2022 | 2.862             |
+| 2023 | 4.300             |
+| 2024 | 12.137            |
+| 2025 | 16.880            |
+| 2026 | 25.429            |
+
+**Eletropostos em São Paulo (dados atuais)**
+
+| Tipo                | Quantidade |
+|---------------------|------------|
+| AC — Recarga Lenta  | 5.401      |
+| DC — Recarga Rápida | 1.553      |
+| Total               | 6.954      |
+
+A recarga em ambientes privados, como os condomínios, é considerada o cenário de maior demanda reprimida. O número de licenciamentos acumulados de veículos elétricos passou de 1,9 mil em 2020 para mais de 215 mil em 2024, um aumento de 100 vezes em cinco anos, e o ponto de recarga tem sido um dos fatores de decisão na hora de alugar ou comprar um imóvel. Com o crescimento acelerado do uso de veículos elétricos, o volume de ações judiciais por moradores de condomínios aumentou nos últimos dois anos por conta do custo de instalação, prioridade de vagas e responsabilidade civil por fiação inadequada. A ausência de uma legislação federal clara agrava o cenário: o projeto de lei nº 158/2025, que garantia ao morador o direito de instalar carregador na própria vaga com custos individuais, ainda está em período de aprovação.
+
+Em São Paulo, a Lei 18.403/26 já está em vigor, mas ainda depende de regulamentação técnica complementar para ser aplicada com a devida segurança para os usuários. As projeções reforçam a urgência do problema: a estimativa é de aproximadamente 580 mil carregadores no Brasil até 2030, sendo 490 mil em ambientes residenciais e de frotas, um investimento estimado em R$ 6,8 bilhões que ainda necessita de soluções de gestão eficientes.
+
+Em relação ao perfil de uso, observa-se que a maior parte dos proprietários de veículos elétricos no Brasil realiza o abastecimento em locais privados, como residências, condomínios e empresas. Mais de um terço dos proprietários considera a atual infraestrutura insuficiente, e uma parcela semelhante aponta a preocupação com a recarga como fonte de estresse. Mesmo com a predominância do uso privado, a ausência de pontos públicos acessíveis impacta diretamente a experiência do usuário.
+
+Os dados analisados mostram um mercado em expansão acelerada com infraestrutura atrasada em relação ao nível de adoção da tecnologia, especialmente no contexto de recargas compartilhadas em ambientes de condomínios e corporativos. Esse descompasso entre a oferta de pontos de recarga e o crescimento da frota é o problema central que o projeto se propõe a resolver, oferecendo uma solução de gestão inteligente para espaços onde o compartilhamento de uso torna a demanda cada vez mais difícil de suprir sem uma plataforma dedicada.
 
 ---
 
