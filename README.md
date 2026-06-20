@@ -169,6 +169,7 @@ Sem um modelo preditivo, o gestor não tem como estimar com precisão o consumo 
 
 Em qualquer volume de dados, sessões com comportamento atípico passam despercebidas sem monitoramento automatizado. Consumo muito acima do esperado para o veículo declarado pelo usuário, durações anormalmente longas, interrupções frequentes em sequência e uso do carregador por identidades não cadastradas são exemplos de situações que o módulo de detecção de anomalias se propõe a capturar. A técnica utilizada é o Isolation Forest, um algoritmo não supervisionado que aprende o que é normal a partir do histórico e identifica os registros que se afastam desse padrão, sem precisar de exemplos rotulados de fraude para funcionar. Ele será complementado por regras determinísticas simples, como emitir alerta quando o consumo de uma sessão superar o dobro da média histórica do usuário. Os dados que alimentam esse modelo são os mesmos já coletados pelo fluxo de sessões, incluindo histórico por usuário, registros granulares de MeterValues com a curva de potência ao longo da sessão, modelo do veículo declarado na plataforma e logs de erro do equipamento.
 Os dois módulos operam sobre os dados que o fluxo principal já coleta, sem exigir sensores adicionais ou fontes externas de informação. E os dois melhoram com o tempo, pois quanto mais sessões acumuladas, mais precisa fica a previsão e mais calibrada fica a detecção de anomalias.
+
 ---
 
 ## Plano para a Sprint 02
