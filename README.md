@@ -48,9 +48,19 @@ Há ainda modelos em que o condomínio deixa de ser o gestor da operação. Empr
 O que todos esses modelos têm em comum é a dependência de um sistema capaz de medir com precisão o consumo individual, o mesmo problema apontado lá no início como ausente na maior parte das infraestruturas compartilhadas hoje. Sem essa camada, qualquer modelo de cobrança se torna impreciso ou injusto. É justamente aí que plataformas como o EV ChargeOps se tornam estruturais, atuando como uma base que viabiliza qualquer um desses modelos de negócio em uma infraestrutura compartilhada.
 
 
-### Opção de aprofundamento (C) — Análise de dados públicos
+### Aprofundamento (C) — Análise de dados públicos
 
-> _Apresentar os dados levantados sobre crescimento da frota de VE no Brasil, distribuição de pontos de recarga e perfis de uso, com análise própria da equipe._
+A expansão de veículos elétricos no Brasil cresceu exponencialmente nos últimos anos, por mais que o Brasil teve acesso aos carros elétricos de modo "atrasado", em 2018 chegou ao consumidor final o Renault Zoe. A partir de 2020, finalmente foi possível realizar uma análise de dados concreta, resultando em registros confiáveis para realizar o acompanhamento de sua evolução, que cresceu de forma expressiva, tendo marco de 177.358 unidades emplacadas, que logo foi superado no final de 2025, o total foi aproximadamente 613.389 unidades, liderada pela BYD, Toyota e GWM.
+
+Entretanto, há uma questão a ser resolvida, em meio a tanto crescimento da tecnologia, é visto que há poucos pontos de recarga, totalizando em fevereiro 21.061 eletropostos públicos e semipúblicos, cerca de 5.900% desde 2020. Por mais do alto valor de eletropostos, a proporção atual é de um carregador para cada 19,6 veículos, o índice considerado adequado pelo setor é de 1 para 10, evidenciando que a infraestrutura, apesar de crescer, não alcança o ritmo da frota.
+
+A recarga em ambientes privados, como por exemplo, os condomínios, é considerado um cenário de maior demanda reprimida. O número de licenciamentos acumulados de veículos elétricos passou de 1,9 mil em 2020 para mais de 215 mil em 2024, um aumento de 100 vezes em um período de cinco anos, o ponto de recarga tem sido um dos fatores por escolha de alugar ou comprar um imóvel. Com o crescimento acelerado do uso de veículos elétricos, o crescimento de ações judiciais por moradores de condomínios aumentou nos últimos dois anos por conta do custo de instalação, prioridade de vagas e responsabilidade civil por fiação inadequada. Com a ausência de uma legislação federal clara só piora o cenário, o projeto de lei nº 158/2025, que garantia ao morador o direito de instalar carregador na própria vaga com custos individuais, ainda está em período de aprovação.
+
+Em São Paulo, a Lei 18.403/26 já está em vigor, mas ainda depende de regulamentação técnica complementar para ser aplicada com a devida segurança para os usuários. As projeções reforçam a urgência do problema, a estimativa é de aproximadamente 580 mil carregadores no Brasil até 2030, sendo 490 mil em ambientes residenciais e de frotas, um investimento estimado em R$ 6,8 bilhões que ainda necessita de soluções de gestão eficientes.
+
+Em relação ao perfil de uso, observa-se que a maior parte dos proprietários de veículos elétricos no Brasil realiza o abastecimento em locais privados, como residências, condomínios e empresas. Mas ainda mais de um terço dos proprietários considera a atual infraestrutura como insuficiente, outra parcela aponta a preocupação com a recarga como fonte de estresse, mesmo com a predominância do uso privado, a ausência de pontos públicos acessíveis impacta diretamente a experiência do usuário.
+
+Os dados analisados mostram um mercado em expansão acelerada com infraestrutura atrasada de acordo com o nível de tecnologia, especialmente no contexto de recargas compartilhadas em ambientes de condomínios e corporativos. E esse desafio entre os pontos de recarga e o aumento do uso de veículos elétricos é o problema central que o nosso projeto se propõe a resolver, oferecendo uma solução de gestão inteligente para espaços onde há o compartilhamento de uso e a demanda se torna incapaz de suprir o aumento exponencial.
 
 ---
 
@@ -122,7 +132,7 @@ Onde a tarifa ajustada é igual à tarifa base somada ao produto do fator de dem
 
 Para os casos excepcionais, o modelo funciona da seguinte forma. Quando uma sessão é interrompida, o consumo medido até o momento da interrupção é cobrado normalmente, pois a energia já foi entregue ao veículo independentemente do motivo do encerramento. O status de interrompida é registrado para auditoria, e se a interrupção foi causada por falha do equipamento, identificada pelo módulo de IA de detecção de anomalias, o gestor pode estornar a sessão manualmente. Quando um usuário não carregou no mês, a parcela variável de consumo em kWh é zero e ele não paga pela energia. A parcela do custo fixo só é cobrada se o usuário tem acesso ativo no sistema, com RFID cadastrado, e usuários com acesso suspenso são excluídos do rateio do custo fixo. Quando uma unidade tem dois veículos, o consumo de todas as sessões de ambos é somado e o cálculo é feito sobre o total da unidade, não por veículo, o que simplifica a gestão e evita disputas internas. Por fim, o sistema consulta mensalmente a bandeira tarifária vigente da ANEEL, verde, amarela ou vermelha, e ajusta automaticamente o valor base do kWh antes de calcular as faturas do período.
 
-### Opção de Aprofundamento (B) — Definição do papel da IA
+### Aprofundamento (B) — Definição do papel da IA
 
 O condomínio não tem como saber, sem um modelo preditivo, quanto de energia os carregadores vão consumir nos próximos dias ou semanas. Sem essa informação, o gestor não consegue negociar a demanda contratada com a distribuidora. Contratar menos do que o necessário gera multa. Contratar muito mais gera desperdício. A previsão de demanda resolve esse problema diretamente.
 A técnica utilizada é a regressão sobre séries temporais. Regressão é um tipo de modelo que aprende a relação entre variáveis de entrada e um valor de saída numérico. No caso, as entradas são o histórico de sessões com seus respectivos horários, dias da semana, consumo em kWh e variáveis de contexto como temperatura e feriados, e a saída é a estimativa de consumo futuro. Modelos como ARIMA, Prophet e XGBoost são candidatos para essa tarefa.
@@ -146,20 +156,32 @@ Os dois módulos de IA utilizam os dados já coletados pelo fluxo principal de s
 <img width="2720" height="2480" alt="ev_chargeops_arquitetura" src="https://github.com/user-attachments/assets/60e15c27-2470-45ed-8b62-5ae5f033dd27" />
 
 
-"O diagrama representa as quatro camadas da plataforma, desde o carregador físico até as interfaces de acesso do gestor e do usuário."
+> O diagrama representa as quatro camadas da plataforma, desde o carregador físico até as interfaces de acesso do gestor e do usuário.
 
 
 ---
 
 ## Papel da IA na Solução
 
-> _A ser preenchido com a descrição estrutural do papel da IA na plataforma: quais problemas resolve, quais técnicas são utilizadas, quais dados alimentam os modelos e qual o impacto esperado._
+A inteligência artificial na plataforma EV ChargeOps resolve dois problemas que não têm solução manual em escala. O primeiro é saber quanto de energia os carregadores vão consumir nos próximos dias. O segundo é identificar sessões com comportamento fora do padrão antes que elas gerem cobranças incorretas ou prejuízos para o condomínio.
 
+Sem um modelo preditivo, o gestor não tem como estimar com precisão o consumo futuro dos carregadores. Dessa forma, essa incerteza tem custo direto, pois contratar menos demanda do que o necessário junto à distribuidora gera multa, e contratar muito mais gera desperdício. O módulo de previsão resolve isso aprendendo o padrão de uso a partir do histórico de sessões, que já inclui horário de início, dia da semana, duração e kWh consumido, e produz estimativas de consumo futuro. A técnica utilizada é regressão sobre séries temporais, com três algoritmos candidatos para avaliação durante a sprint 02, sendo eles ARIMA, Prophet e XGBoost. O de melhor desempenho para o perfil dos dados disponíveis será selecionado. Enquanto o histórico real do carregador da FIAP não estiver disponível em volume suficiente, o dataset de Electric Vehicle Charging Sessions do Kaggle será usado para prototipação.
+
+Em qualquer volume de dados, sessões com comportamento atípico passam despercebidas sem monitoramento automatizado. Consumo muito acima do esperado para o veículo declarado pelo usuário, durações anormalmente longas, interrupções frequentes em sequência e uso do carregador por identidades não cadastradas são exemplos de situações que o módulo de detecção de anomalias se propõe a capturar. A técnica utilizada é o Isolation Forest, um algoritmo não supervisionado que aprende o que é normal a partir do histórico e identifica os registros que se afastam desse padrão, sem precisar de exemplos rotulados de fraude para funcionar. Ele será complementado por regras determinísticas simples, como emitir alerta quando o consumo de uma sessão superar o dobro da média histórica do usuário. Os dados que alimentam esse modelo são os mesmos já coletados pelo fluxo de sessões, incluindo histórico por usuário, registros granulares de MeterValues com a curva de potência ao longo da sessão, modelo do veículo declarado na plataforma e logs de erro do equipamento.
+Os dois módulos operam sobre os dados que o fluxo principal já coleta, sem exigir sensores adicionais ou fontes externas de informação. E os dois melhoram com o tempo, pois quanto mais sessões acumuladas, mais precisa fica a previsão e mais calibrada fica a detecção de anomalias.
 ---
 
 ## Plano para a Sprint 02
 
-> _A ser preenchido com o detalhamento do que será desenvolvido, em qual ordem e com quais tecnologias._
+O desenvolvimento da nossa sprint 02 seguirá quatro etapas em sequência. A ordem importa porque cada etapa entrega a base sobre a qual a próxima é construída.
+
+A primeira etapa é a infraestrutura e a ingestão de dados. O objetivo é garantir que o sistema consiga receber os eventos do carregador, validá-los e persistir os registros de sessão de forma estruturada. Isso envolve configurar o banco de dados com o esquema de entidades definido na Frente 3, que cobre usuário, unidade, sessão e fatura, e implementar o serviço que recebe os eventos OCPP ou as leituras Modbus TCP e os grava como série temporal. As tecnologias desta etapa são Python, PostgreSQL e FastAPI.
+
+A segunda etapa é o motor de rateio e a geração de faturas. Com sessões sendo registradas, essa etapa implementa a lógica de cálculo descrita na Frente 3, que inclui a soma do consumo em kWh por sessão, a aplicação da tarifa ajustada por horário de ponta, a inclusão da parcela do custo fixo mensal rateada entre os usuários ativos e o tratamento dos casos excepcionais de sessão interrompida, usuário sem carregamento no mês e unidade com dois veículos. Essa etapa também inclui a consulta automatizada à bandeira tarifária vigente da ANEEL, que ajusta o valor base do kWh antes de cada ciclo de faturamento, e a geração da fatura individual com detalhamento completo. As tecnologias são Python e PostgreSQL.
+
+A terceira etapa são os módulos de IA. Com histórico de sessões disponível, mesmo que parcialmente simulado a partir do dataset do Kaggle, essa etapa implementa os dois modelos descritos na seção anterior. Para a previsão de demanda, os três algoritmos candidatos serão treinados e avaliados, e o de melhor desempenho será integrado à plataforma. Para a detecção de anomalias, o Isolation Forest será calibrado e combinado com as regras determinísticas de alerta. As tecnologias desta etapa são Python com as bibliotecas scikit-learn, statsmodels e Prophet.
+
+A quarta etapa são as interfaces de acesso. Com o back-end funcionando, essa etapa entrega as telas para os dois perfis de usuário definidos na arquitetura. O painel do gestor expõe a visão consolidada das sessões do mês, os gráficos de consumo por unidade e período, os alertas gerados pelo módulo de detecção de anomalias e a exportação de relatórios e faturas. O aplicativo do usuário mostra o histórico individual de sessões, o consumo acumulado no mês e a fatura com detalhamento de uso. As tecnologias desta etapa são React no front-end e FastAPI nos endpoints que alimentam as interfaces.
 
 ---
 
@@ -177,6 +199,10 @@ Os dois módulos de IA utilizam os dados já coletados pelo fluxo principal de s
 - VoltBras. Como o OCPP 1.6 facilita o carregamento elétrico. Disponível em: https://voltbras.com/ocpp-1-6-carregamento/
 - Power2Go. Cobrança por kWh ou assinatura mensal? O melhor modelo para recarga de carros elétricos. Disponível em: https://www.power2go.com.br/post/melhor-modelo-de-cobran%C3%A7a-para-recarga-de-carros-el%C3%A9tricos
 - Sindiconet. Carro elétrico: recarregue seu veículo sem sair do condomínio. Disponível em: https://www.sindiconet.com.br/informese/carro-eletrico-mercado-coluna-de-olho-no-mercado
+- ABVE — Associação Brasileira do Veículo Elétrico. Geografia da Eletromobilidade: painel de dados por região. Disponível em: https://abve.org.br/abve-data/bi-geografia-da-eletromobilidade/
+- ABVE — Associação Brasileira do Veículo Elétrico. Eletropostos: painel de dados de infraestrutura de recarga no Brasil. Disponível em: https://abve.org.br/abve-data/bi-eletropostos/
+- FANTONI, Roberto; NADALIN, Daniele. Recarregar para crescer: expansão de infraestrutura para veículos elétricos cria oportunidade de R$ 6,8 bi. McKinsey & Company, 12 dez. 2024. Disponível em: https://www.mckinsey.com/br/our-insights/all-insights/recarregar-para-crescer
+- NeoCharge. Qual o perfil dos interessados por carros elétricos no Brasil? Publicado em 23 jan. 2023. Disponível em: https://www.neocharge.com.br/blogs/post/perfil-entusiastas-carro-eletrico-brasil
 
 ### Frente 2
 
