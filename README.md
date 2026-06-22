@@ -127,23 +127,49 @@ Os dados analisados mostram um mercado em expansão acelerada com infraestrutura
 
 ## Frente 2 — Base Regulatória e Técnica
 
-> _A ser preenchido._
-
 ### Resolução Normativa ANEEL nº 1.000/2021
 
-> _Documentar os pontos relevantes para a operação do EV ChargeOps: exploração comercial da recarga, comunicação prévia à distribuidora e exigência de protocolos abertos._
+A Resolução Normativa ANEEL nº 1.000/2021 é o principal marco regulatório que governa a operação de estações de recarga de veículos elétricos no Brasil. Para o EV ChargeOps, quatro artigos são diretamente relevantes.
+
+O artigo 554 permite que a recarga seja oferecida como serviço comercial a terceiros, com preços livremente negociados entre o operador e o usuário, sem necessidade de aprovação tarifária da ANEEL. Isso significa que um condomínio pode disponibilizar carregadores para moradores e visitantes e estabelecer seus próprios critérios de cobrança, o que é exatamente o modelo que a plataforma viabiliza.
+
+O artigo 550 determina que a instalação de uma estação de recarga deve ser comunicada previamente à distribuidora local nos casos de nova conexão, aumento ou redução de carga ou alteração do nível de tensão. Essa comunicação existe porque carregadores, especialmente os de maior potência, representam carga significativa para a rede elétrica, e a distribuidora precisa avaliar se a infraestrutura local suporta a nova demanda, se há necessidade de reforço, se o sistema de medição precisa ser adaptado e se será necessário alterar a modalidade de fornecimento. No caso do GW7K-HCA-20, com potência de 7 kW, essa avaliação é obrigatória antes da instalação.
+
+O artigo 552 é o mais relevante para as decisões técnicas da plataforma. Ele determina que equipamentos de recarga que não sejam de uso exclusivamente privado devem ser compatíveis com protocolos abertos de domínio público para comunicação, supervisão e controle remotos. A resolução não cita tecnologias específicas, mas os protocolos mais adotados no mercado para esse fim são o OCPP para comunicação entre carregadores e sistemas centrais, o OCPI para integração entre operadores de recarga e o OpenADR para gerenciamento energético. Essa exigência é o que justifica a adoção do OCPP como protocolo de gestão de sessões na arquitetura do EV ChargeOps: além de ser o padrão de mercado, seu uso é uma obrigação regulatória para o cenário de recarga compartilhada.
+
+O artigo 553 complementa ao exigir que a unidade consumidora observe as normas e padrões da distribuidora local, o que pode incluir apresentação de projetos elétricos, estudos de demanda e especificações de proteção elétrica. O artigo 555 proíbe a injeção de energia dos veículos na rede pública para geração de créditos, embora permita o uso da energia do veículo para alimentar a própria instalação. Por fim, o artigo 556 reconhece veículos elétricos como passíveis de ressarcimento em casos de danos elétricos causados por problemas no fornecimento.
 
 ### Carregador GoodWe HCA G2
 
-> _Descrever as interfaces disponíveis (RS-485, LAN, Wi-Fi, Bluetooth e RFID) e o que cada uma permite fazer na plataforma._
+O carregador GoodWe HCA G2, modelo GW7K-HCA-20, é um carregador CA monofásico com potência nominal de 7 kW, instalado no estacionamento L1 da FIAP. Ele possui cinco interfaces de comunicação e conectividade, cada uma com um papel distinto na plataforma.
+
+A interface RS-485 é um padrão de comunicação serial que utiliza sinalização diferencial, transmitindo dados pela diferença de tensão entre dois fios em vez de medir cada fio em relação ao terra. Essa característica torna a comunicação muito mais resistente a ruídos elétricos, o que é especialmente relevante em ambientes com motores, inversores de frequência e outros equipamentos elétricos como estacionamentos. O RS-485 suporta múltiplos dispositivos no mesmo barramento, opera em distâncias de até 1.200 metros e é amplamente utilizado em automação industrial e medição de energia. No carregador, o RS-485 está disponível em duas portas e serve como canal de comunicação de baixo nível para leitura de registros via Modbus RTU, sendo útil em ambientes sem infraestrutura de rede IP ou como redundância à LAN.
+
+A interface LAN é a porta Ethernet física do equipamento, o conector RJ-45 que permite conectar o carregador à rede local cabeada. Ela é a interface de comunicação de maior estabilidade e largura de banda disponível no HCA G2, recomendada como conexão primária ao servidor da plataforma quando há infraestrutura de rede disponível no estacionamento. Pela LAN, o carregador se comunica via Modbus TCP, o protocolo nativo confirmado no datasheet oficial do equipamento.
+
+A interface Wi-Fi permite conectar o carregador à rede local sem a necessidade de cabeamento dedicado, o que a torna a alternativa mais prática para instalações em estacionamentos de condomínios onde passar cabo não é viável. Em termos de protocolo, o Wi-Fi no HCA G2 serve o mesmo papel da LAN: comunicação com o servidor via Modbus TCP e acesso ao aplicativo SEMS+ para gestão e monitoramento.
+
+O Bluetooth não é uma interface direta do hardware do carregador, mas está presente no aplicativo SEMS+ para pareamento e configuração inicial do equipamento. Ele não é utilizado para transmissão de dados de sessão ou comunicação com o servidor da plataforma.
+
+A interface RFID é o sistema de identificação por radiofrequência que permite autenticar usuários sem contato físico e sem necessidade de smartphone. O leitor RFID do carregador identifica o cartão ou tag do usuário em milissegundos, valida a identidade no sistema e autoriza o início da sessão. O kit de instalação do GW7K-HCA-20 acompanha dois cartões RFID. Essa interface é relevante especialmente para usuários que preferem não depender de aplicativo ou para cenários onde o acesso ao smartphone não é conveniente, como em estacionamentos com baixo sinal de celular.
 
 ### API GoodWe — SEMS Portal
 
-> _Documentar os dados expostos pela API: status, potência, energia entregue e eventos de sessão._
+A plataforma SEMS+ da GoodWe expõe dados do carregador organizados em cinco seções, todas acessadas pela equipe diretamente na plataforma durante a pesquisa.
 
-### Opção de aprofundamento escolhida
+Os registros de carregamento contêm os dados mais críticos para o modelo de rateio: data e hora de início e de término de cada sessão, energia total carregada em kWh, energia verde carregada em kWh, potência média e potência máxima do carregador em kW, razão do término da recarga, identificador do carregador, porta utilizada e flag de veículo conectado. Esses campos são a fonte primária para o cálculo de consumo individual por sessão e para o treinamento dos modelos de IA descritos na Frente 3.
 
-> _A ser preenchido._
+O monitoramento de operação retorna leituras de potência em kW espaçadas a cada 10 minutos ao longo do dia. Essa granularidade é suficiente para identificar padrões de uso horário e alimentar o modelo de previsão de demanda, embora seja menos precisa que os MeterValues do OCPP, que operam a cada 60 segundos.
+
+O monitoramento de recarga detalha, também em intervalos de 10 minutos, os tipos de energia utilizados em cada momento: energia verde, energia da rede e energia carregada, com os respectivos valores em kWh. Esse dado é relevante para cenários em que o condomínio opera com geração solar, como é o caso do Energy Innovation Lab da FIAP.
+
+Os registros de controle documentam os comandos operacionais enviados ao carregador, incluindo o item controlado, como potência mínima, modo de recarga e potência máxima, o valor configurado, o resultado do comando, o canal de origem, como web ou aplicativo, e o operador responsável. Esses registros permitem auditar alterações de configuração e identificar mudanças que possam ter impactado o comportamento do equipamento em determinado período.
+
+A seção de alarmes expõe os eventos de falha do equipamento com nome do alarme, nível de severidade, status de recuperação, componente afetado, duração e tempo de recuperação. Esses dados são a fonte para o módulo de detecção de anomalias da plataforma, complementando os dados de sessão na identificação de comportamentos atípicos causados por falha do equipamento.
+
+### Aprofundamento (B) — Exploração da API GoodWe
+
+O mapeamento da API SEMS+ foi realizado com acesso direto à plataforma, documentando os campos disponíveis em cada seção conforme descrito acima. A API expõe histórico de sessões individuais com timestamps de início e fim, kWh por sessão e potência média e máxima, o que confirma que os dados necessários para alimentar os modelos de IA da Frente 3 estão disponíveis sem necessidade de integração com fontes externas para os campos essenciais de consumo.
 
 ---
 
@@ -267,7 +293,33 @@ A quarta etapa são as interfaces de acesso. Com o back-end funcionando, essa et
 - NeoCharge. Qual o perfil dos interessados por carros elétricos no Brasil? Publicado em 23 jan. 2023. Disponível em: https://www.neocharge.com.br/blogs/post/perfil-entusiastas-carro-eletrico-brasil
 
 ### Frente 2
-
+- ANEEL. Resolução Normativa nº 1.000, de 7 de dezembro de 2021. Disponível em: https://www.aneel.gov.br/cedoc/ren20211000.pdf
+- GoodWe. Linha HCA G2: datasheet oficial GW7K-HCA-20, monofásico 7 kW. Versão PT-V2.1, 2024. Disponível em: https://br.goodwe.com/Ftp/Downloads/Datasheet/PT/GW_HCA-G2_Datasheet-PT.pdf
+- GoodWe. Plataforma SEMS+. Acesso realizado pela equipe em junho de 2026. Disponível em: https://semsplus.goodwe.com/
+- Analog Devices. Full Guide to Serial Communication Protocol and RS-485. Disponível em: https://www.analog.com/en/resources/technical-articles/full-guide-to-serial-communication-protocol-and-our-rs485.html
+- Analog Devices. AN-960: RS-485/RS-422 Circuit Implementation Guide. Disponível em: https://www.analog.com/en/resources/app-notes/an-960.html
+- Analog Devices. RS-485: Still the Most Robust Communication. Disponível em: https://www.analog.com/en/resources/technical-articles/rs485-still-the-most-robust-communication.html
+- Chipkin. RS-485 Physical Layer Reference. Disponível em: https://docs.chipkin.com/articles/rs485-physical-layer-reference/
+- Wikipedia. RS-485. Disponível em: https://en.wikipedia.org/wiki/RS-485
+- Intel. O que é a tecnologia Bluetooth? Disponível em: https://www.intel.com.br/content/www/br/pt/products/docs/wireless/what-is-bluetooth.html
+- Tecnoblog. Bluetooth: o que é, como funciona e quais são versões da tecnologia? Disponível em: https://tecnoblog.net/responde/o-que-e-bluetooth/
+- Forbes. What Is Bluetooth? The Wireless Technology Explained. Disponível em: https://www.forbes.com/sites/technology/article/what-is-bluetooth/
+- Wired. The WIRED Guide to Bluetooth. Disponível em: https://www.wired.com/story/what-is-bluetooth/
+- Alura. Bluetooth: o que é, tipos, segurança e bibliotecas para Flutter. Disponível em: https://www.alura.com.br/artigos/bluetooth
+- Britannica. Radio-Frequency Identification (RFID). Disponível em: https://www.britannica.com/technology/RFID
+- Schneider Electric. What is RFID? Advantages and disadvantages. Disponível em: https://blog.se.com/industry/machine-and-process-management/2021/06/20/rifd-what-are-its-advantages-and-disadvantages/
+- Atlas RFID Store. What is RFID? How RFID Systems Work. Disponível em: https://www.atlasrfidstore.com/rfid-resources/rfid-beginners-guide/
+- RFID.com. A Guide to Radio Frequency Identification (RFID). Disponível em: https://www.rfid.com/rfid-101/
+- UFRJ. RFID: prós e contras. Disponível em: https://www.gta.ufrj.br/grad/07_1/rfid/RFID_arquivos/prosecontras.htm
+- ArXiv. RFID Applications: An Introductory and Exploratory Study. Disponível em: https://arxiv.org/abs/1002.1179
+- ArXiv. Technical Analysis of Security Infrastructure in RFID Technology. Disponível em: https://arxiv.org/abs/1505.00172
+- ArXiv. RFID Exploitation and Countermeasures. Disponível em: https://arxiv.org/abs/2110.00094
 
 ### Frente 3
 - GoodWe. Linha HCA G2: datasheet oficial GW7K-HCA-20, monofásico 7 kW. Versão PT-V2.1, 2024. Disponível em: https://br.goodwe.com/Ftp/Downloads/Datasheet/PT/GW_HCA-G2_Datasheet-PT.pdf
+- GoodWe. Plataforma SEMS+. Acesso realizado pela equipe em junho de 2026. Disponível em: https://semsplus.goodwe.com/
+- Open Charge Alliance. OCPP 1.6 Specification, 2015. Disponível em: https://www.openchargealliance.org/protocols/ocpp-16/
+- Liu, F. T.; Ting, K. M.; Zhou, Z.-H. Isolation Forest. IEEE International Conference on Data Mining, 2008.
+- Meta. Prophet: Forecasting at Scale. Disponível em: https://github.com/facebook/prophet
+- Kaggle. Electric Vehicle Charging Sessions dataset. Disponível em: https://www.kaggle.com/datasets/michaelbryantds/electric-vehicle-charging-dataset
+
